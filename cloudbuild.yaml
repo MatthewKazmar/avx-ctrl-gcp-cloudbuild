@@ -23,6 +23,11 @@ steps:
       - 'TF_VAR_zone=us-central1-c'
       - 'TF_VAR_controller_name=cloudbuild-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'
+    secretEnv:
+      - 'TF_VAR_aviatrix_controller_admin_email'
+      - 'TF_VAR_aviatrix_controller_admin_password'
+      - 'TF_VAR_aviatrix_customer_id'
+      - 'TF_VAR_incoming_ssl_cidrs'
 availableSecrets:
   secretManager:
     - versionName: projects/$PROJECT_ID/secrets/avx-admin-email/versions/1
