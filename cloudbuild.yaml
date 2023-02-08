@@ -19,7 +19,7 @@ steps:
           export TF_VAR_myip=$(curl -s ifconfig.me)
           echo "[APPLY] My build worker IP is ${TF_VAR_myip}"
           echo "[APPLY] Running Terraform apply."
-          terraform apply -auto-approve
+          terraform apply -auto-approve -lock=false
     env:
       - 'TF_VAR_project=$PROJECT_ID'
       - 'TF_VAR_zone=us-central1-c'
