@@ -17,7 +17,7 @@ steps:
           apk add --no-cache python3 py3-pip
           pip install -r .terraform/modules/aviatrix-controller-gcp/requirements.txt
           echo "[APPLY] Running Terraform apply."
-          terraform apply
+          terraform apply -auto-approve
     env:
       - 'TF_VAR_project=$PROJECT_ID'
       - 'TF_VAR_zone=us-central1-c'
