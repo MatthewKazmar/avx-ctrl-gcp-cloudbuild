@@ -10,5 +10,5 @@ variable "image" { type = string }
 variable "myip" { type = string}
 
 locals {
-  incoming_ssl_cidrs = concat(split(",", var.incoming_ssl_cidrs), "${var.myip}/32")
+  incoming_ssl_cidrs = concat(split(",", var.incoming_ssl_cidrs), ["${var.myip}/32"])
 }
