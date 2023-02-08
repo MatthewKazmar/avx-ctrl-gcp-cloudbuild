@@ -11,15 +11,16 @@ provider "google" {
   zone        = var.zone
 }
 
-# # We need a json file for a service account in the workspace.
-# data "google_secret_manager_secret_version" "aviatrix" {
-#   secret = "avx-service-account"
-# }
+# We need a json file for a service account in the workspace.
+data "google_secret_manager_secret_version" "aviatrix" {
+  secret = "avx-service-account"
+}
 
-# resource "local_sensitive_file" "gcp_json" {
-#   filename = "gcp.json"
-#   content  = data.google_secret_manager_secret_version.aviatrix.secret_data
-# }
+resource "local_sensitive_file" "gcp_json" {
+  filename = "gcp.json"
+  content  = data.google_secret_manager_secret_version.aviatrix.secret_data
+
+}
 
 # module "aviatrix-controller-gcp" {
 #   source                              = "AviatrixSystems/gcp-controller/aviatrix"
