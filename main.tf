@@ -12,17 +12,13 @@ provider "google" {
 }
 
 # We need a json file for a service account in the workspace.
-data  "google_service_account" "aviatrix" {
-  account_id = var.gcp_account_id
-}
-
-resource "google_service_account_key" "aviatrix" {
-  service_account_id = data.google_service_account.aviatrix.aviatrix.name
+data "google_secret_manager_secret_version" "aviatrix" {
+  secret = "avx-service-account"
 }
 
 resource "local_sensitive_file" "gcp_json" {
   filename = "gcp.json"
-  content  = google_service_account_key.aviatrix.private_key
+  content  = google_secret_manager_secret_version.aviatrix.secret_data
 }
 
 module "aviatrix-controller-gcp" {
