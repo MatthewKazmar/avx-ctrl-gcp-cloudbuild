@@ -32,6 +32,6 @@ module "aviatrix-controller-gcp" {
   aviatrix_controller_admin_password  = var.aviatrix_controller_admin_password
   aviatrix_customer_id                = var.aviatrix_customer_id
   gcloud_project_credentials_filepath = resource.local_sensitive_file.gcp_json.filename
-  incoming_ssl_cidrs                  = var.incoming_ssl_cidrs
+  incoming_ssl_cidrs                  = local.incoming_ssl_cidrs
   image                               = var.image
 }

@@ -8,3 +8,7 @@ variable "aviatrix_customer_id" { type = string }
 variable "controller_name" { type = string }
 variable "incoming_ssl_cidrs" { type = list(any) }
 variable "image" { type = string }
+
+locals {
+  incoming_ssl_cidrs = split(",", var.incoming_ssl_cidrs)
+}
