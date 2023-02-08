@@ -18,7 +18,7 @@ data "google_secret_manager_secret_version" "aviatrix" {
 
 resource "local_sensitive_file" "gcp_json" {
   filename = "gcp.json"
-  content  = google_secret_manager_secret_version.aviatrix.secret_data
+  content  = data.google_secret_manager_secret_version.aviatrix.secret_data
 }
 
 module "aviatrix-controller-gcp" {
