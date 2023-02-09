@@ -8,7 +8,7 @@ terraform {
 }
 
 provider aviatrix {
-  controller_ip = data.terraform_remote_state.controller.public_ip
+  controller_ip = data.terraform_remote_state.controller.outputs.public_ip
   username = "admin"
   password = var.aviatrix_controller_admin_password
 }
