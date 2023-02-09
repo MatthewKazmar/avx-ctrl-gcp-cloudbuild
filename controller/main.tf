@@ -32,4 +32,5 @@ module "aviatrix-controller-gcp" {
   incoming_ssl_cidrs                  = local.incoming_ssl_cidrs
   image                               = var.image
   subnet_cidr = var.subnet_cidr
+  network_name = var.network_name
 }

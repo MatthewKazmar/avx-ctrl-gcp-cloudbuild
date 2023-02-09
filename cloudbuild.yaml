@@ -21,6 +21,7 @@ steps:
       - 'TF_VAR_controller_name=cloudbuild-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'
       - 'TF_VAR_subnet_cidr=10.31.0.0/24'
+      - 'TF_VAR_network_name=aviatrix-controller-network'
     secretEnv:
       - 'TF_VAR_aviatrix_controller_admin_email'
       - 'TF_VAR_aviatrix_controller_admin_password'
@@ -41,6 +42,7 @@ steps:
           terraform apply -auto-approve -lock=false
     env:
       - 'TF_VAR_project=$PROJECT_ID'
+      - 'TF_VAR_network_name=aviatrix-controller-network'
     secretEnv:
       - 'TF_VAR_aviatrix_controller_admin_password'
 availableSecrets:

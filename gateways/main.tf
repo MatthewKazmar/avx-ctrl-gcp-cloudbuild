@@ -8,7 +8,7 @@ terraform {
 }
 
 provider aviatrix {
-  controller_ip = data.terraform_remote_state.controller.module.aviatrix-controller-gcp.public_ip
+  controller_ip = data.terraform_remote_state.controller.public_ip
   username = "admin"
   password = var.aviatrix_controller_admin_password
 }
@@ -18,6 +18,17 @@ data "terraform_remote_state" "controller" {
   config = {
     bucket = "mk1-tfstate"
     prefix = "state/controller"
+  }
+}
+
+resource "google_compute_firewall" "gateways-worker" {
+  name          = "gateways-worker"
+  network       = var.network
+  source_ranges = [ "${var.myip}/32"]
+
+  allow {
+    protocol = "tcp"
+    ports = ["443"]
   }
 }
 
