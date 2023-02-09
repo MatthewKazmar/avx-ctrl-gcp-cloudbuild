@@ -36,6 +36,7 @@ steps:
           cd gateways
           echo "[GATEWAYS]: Terraform Init"
           terraform init
+          apk add --no-cache curl
           export TF_VAR_myip=$(curl -s ifconfig.me)
           echo "[GATEWAYS] My build worker IP is ${TF_VAR_myip}"
           echo "[GATEWAYS] Running Terraform apply."

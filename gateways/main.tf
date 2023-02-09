@@ -23,7 +23,7 @@ data "terraform_remote_state" "controller" {
 
 resource "google_compute_firewall" "gateways-worker" {
   name          = "gateways-worker"
-  network       = var.network
+  network       = var.network_name
   source_ranges = [ "${var.myip}/32"]
 
   allow {
