@@ -8,6 +8,7 @@ variable "controller_name" { type = string }
 variable "incoming_ssl_cidrs" { type = string }
 variable "image" { type = string }
 variable "myip" { type = string}
+variable "subnet_cidr" { type = string }
 
 locals {
   incoming_ssl_cidrs = concat(split(",", var.incoming_ssl_cidrs), ["${var.myip}/32"])
