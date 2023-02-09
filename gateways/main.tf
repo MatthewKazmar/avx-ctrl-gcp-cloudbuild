@@ -21,6 +21,11 @@ data "terraform_remote_state" "controller" {
   }
 }
 
+resource "aviatrix_controller_security_group_management_config" "aviatrix_sgm" {
+  account_name                     = var.project
+  enable_security_group_management = true
+}
+
 resource "google_compute_firewall" "gateways-worker" {
   name          = "gateways-worker"
   network       = var.network_name
