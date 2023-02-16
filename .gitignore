@@ -5,3 +5,4 @@ terraform.tfstate*
 venv
 terraform.tfvars
 gcp.json
+setenv.ps1

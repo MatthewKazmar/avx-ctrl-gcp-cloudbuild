@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "mk1-tfstate"
-    prefix = "state/gateways"
+    state_bucket = "mk1-tfstate"
+    prefix       = "state/gateways"
   }
 }

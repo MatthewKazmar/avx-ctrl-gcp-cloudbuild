@@ -10,21 +10,21 @@ terraform {
   }
 }
 
-provider aviatrix {
+provider "aviatrix" {
   controller_ip = data.terraform_remote_state.controller.outputs.public_ip
-  username = "admin"
-  password = var.aviatrix_controller_admin_password
+  username      = "admin"
+  password      = var.aviatrix_controller_admin_password
 }
 
-provider google {
+provider "google" {
   project = var.project
 }
 
 data "terraform_remote_state" "controller" {
   backend = "gcs"
   config = {
-    bucket = "mk1-tfstate"
-    prefix = "state/controller"
+    state_bucket = "mk1-tfstate"
+    prefix       = "state/controller"
   }
 }
 
@@ -34,14 +34,14 @@ resource "aviatrix_controller_security_group_management_config" "aviatrix_sgm" {
 }
 
 resource "google_compute_firewall" "gateways-worker" {
-  name          = "gateways-worker"
+  name = "gateways-worker"
 
   network       = var.network_name
-  source_ranges = [ "${var.myip}/32"]
+  source_ranges = ["${var.myip}/32"]
 
   allow {
     protocol = "tcp"
-    ports = ["443"]
+    ports    = ["443"]
   }
 }
 
