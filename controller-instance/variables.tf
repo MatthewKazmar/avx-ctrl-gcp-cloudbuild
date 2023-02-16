@@ -53,7 +53,7 @@ data "terraform_remote_state" "network" {
   backend = "gcs"
   config = {
     state_bucket = var.state_bucket
-    prefix       = "${var.state_prefix}/network"
+    prefix       = local.remote_state_prefix
   }
 }
 
@@ -62,6 +62,8 @@ data "google_compute_subnetwork" "avx_subnetwork" {
 }
 
 locals {
+  state_prefix = "${var.state_prefix}/instance"
+  remote_state_prefix = "${var.state_prefix}/network"
   public_ip_name     = "${var.controller_name}-publicip"
   firewall_rule_name = "${var.controller_name}-adminaccess"
   instance_zone      = "${data.google_compute_subnetwork.avx_subnetwork.region}-${var.zone}"

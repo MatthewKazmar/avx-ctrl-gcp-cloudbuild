@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    state_bucket = var.state_bucket
-    prefix       = "${var.state_prefix}/network"
+    bucket = var.state_bucket
+    prefix = local.state_prefix
   }
 }

@@ -19,3 +19,7 @@ variable "avx_service_account_secret_name" {
   description = "Name of the secret that contains the Aviatrix Service Account json."
   default     = "avx-service-account"
 }
+
+locals {
+  state_prefix = "${var.state_prefix}/init-tf"
+}

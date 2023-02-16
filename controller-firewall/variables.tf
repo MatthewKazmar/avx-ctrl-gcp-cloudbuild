@@ -12,7 +12,11 @@ variable "network_tags" {
 data "terraform_remote_state" "instance" {
   backend = "gcs"
   config = {
-    state_bucket = var.state_bucket
-    prefix       = "${var.state_prefix}/instance"
+    bucket = var.state_bucket
+    prefix = local.remote_state_prefix
   }
+}
+
+locals {
+  remote_state_prefix = "${var.state_prefix}/instance"
 }
