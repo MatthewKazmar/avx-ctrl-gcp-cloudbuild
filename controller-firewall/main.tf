@@ -12,7 +12,7 @@ data "http" "buildip" {
 
 resource "google_compute_firewall" "aviatrix_cloudbuild" {
   name          = "avx-cloudbuild-temp-rule"
-  network       = data.terraform_remote_state.instance.outputs.network
+  network       = data.terraform_remote_state.instance.outputs.controller_network
   source_ranges = [data.http.buildip.response_body]
 
   allow {
