@@ -7,7 +7,7 @@ steps:
       - |
           cd controller-network
           echo "[CONTROLLER-NETWORK]: Running Terraform Init"
-          terraform init
+          terraform init -backend_config="bucket=$(echo state_bucket)" -backend_config="prefix=avx/init-tf" -backend_config="bucket=$(echo state_bucket)" -backend_config="prefix=avx/network"
           echo "[CONTROLLER-NETWORK] Running Terraform apply."
           terraform apply -auto-approve -lock=false
     env:
@@ -21,7 +21,7 @@ steps:
       - |
           cd controller-instance
           echo "[CONTROLLER-INSTANCE]: Running Terraform Init"
-          terraform init
+          terraform init -backend_config="bucket=$(echo state_bucket)" -backend_config="prefix=avx/init-tf" -backend_config="bucket=$(echo state_bucket)" -backend_config="prefix=avx/instance"
           echo "[CONTROLLER-INSTANCE]: Running Terraform apply."
           terraform apply -auto-approve -lock=false
     env:
@@ -38,7 +38,7 @@ steps:
           cd controller-firewall
           echo "[CONTROLLER-FIREWALL]: Adding Cloud Build Worker IP to firewall."
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init
+          terraform init -backend_config="bucket=$(echo state_bucket)" -backend_config="prefix=avx/init-tf"
           echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
           terraform apply -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Added worker IP to firewall."
@@ -68,7 +68,7 @@ steps:
       - |
           cd controller-init-tf
           echo "[CONTROLLER-INIT-TF]: Running Terraform Init."
-          terraform init
+          terraform init -backend_config="bucket=$(echo state_bucket)" -backend_config="prefix=avx/init-tf"
           echo "[CONTROLLER-INIT-TF]: Running Terraform Apply."
           terraform apply -auto-approve -lock=false
   - id: 'controller-firewall-destroy'
@@ -80,7 +80,7 @@ steps:
           cd controller-firewall
           echo "[CONTROLLER-FIREWALL]: Removing Cloud Build Worker IP from firewall."
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init
+          terraform init -backend_config="bucket=$(echo state_bucket)" -backend_config="prefix=avx/init-tf"
           echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
           terraform destroy -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Removed worker IP from firewall."
@@ -88,7 +88,7 @@ options:
   env:
     - 'TF_VAR_project=$PROJECT_ID'
   secretEnv:
-    - 'TF_VAR_state_bucket'
+    - 'state_bucket'
     - 'TF_VAR_subnetwork_self_link'
     - 'AVIATRIX_PASSWORD'
 availableSecrets:
@@ -102,6 +102,6 @@ availableSecrets:
     - versionName: projects/$PROJECT_ID/secrets/avx-admin-cidrs/versions/1
       env: 'TF_VAR_admin_cidrs'
     - versionName: projects/$PROJECT_ID/secrets/avx-state-bucket/versions/1
-      env: 'TF_VAR_state_bucket'
+      env: 'state_bucket'
     - versionName: projects/$PROJECT_ID/secrets/avx-subnetwork/versions/1
       env: 'TF_VAR_subnetwork_self_link'
