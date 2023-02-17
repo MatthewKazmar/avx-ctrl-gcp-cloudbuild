@@ -28,7 +28,6 @@ variable "subnetwork_self_link" {
 }
 
 locals {
-  state_prefix = "${var.state_prefix}/network"
   subnetwork_name = "${var.network_name}-subnet"
   create_vpc      = var.subnetwork_self_link == "" ? 1 : 0
 }

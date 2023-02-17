@@ -3,6 +3,11 @@ variable "project" {
   description = "Google Cloud Project for deployment"
 }
 
+variable "state_bucket" {
+  type        = string
+  description = "State bucket for Remote State."
+}
+
 variable "admin_cidrs" {
   type        = list(string)
   description = "Allow admin access (HTTPS) to Aviatrix Controller."
@@ -42,7 +47,7 @@ data "terraform_remote_state" "network" {
   backend = "gcs"
   config = {
     state_bucket = var.state_bucket
-    prefix       = local.remote_state_prefix
+    prefix       = "avx/network"
   }
 }
 
@@ -51,11 +56,8 @@ data "google_compute_subnetwork" "avx_subnetwork" {
 }
 
 locals {
-  state_prefix = "${var.state_prefix}/instance"
-  remote_state_prefix = "${var.state_prefix}/network"
   public_ip_name     = "${var.controller_name}-publicip"
   firewall_rule_name = "${var.controller_name}-adminaccess"
   instance_zone      = "${data.google_compute_subnetwork.avx_subnetwork.region}-${var.zone}"
-  #admin_cidrs = concat(var.admin_cidrs, ["35.235.240.0/20"])
   admin_cidrs = var.admin_cidrs
 }

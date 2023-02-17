@@ -23,7 +23,7 @@ steps:
           echo "[CONTROLLER-INSTANCE]: Running Terraform Init"
           terraform init -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/init-tf" -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/instance"
           echo "[CONTROLLER-INSTANCE]: Running Terraform apply."
-          terraform apply -auto-approve -lock=false
+          terraform apply -auto-approve -lock=false -var="state_bucket=$(echo $state_bucket)"
     env:
       - 'TF_VAR_controller_name=mattk-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'
@@ -40,7 +40,7 @@ steps:
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
           terraform init -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/init-tf"
           echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
-          terraform apply -auto-approve -lock=false
+          terraform apply -auto-approve -lock=false -var="state_bucket=$(echo $state_bucket)"
           echo "[CONTROLLER-FIREWALL]: Added worker IP to firewall."
   - id: 'controller-init-py'
     name: 'hashicorp/terraform:1.3.7'
@@ -82,7 +82,7 @@ steps:
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
           terraform init -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/init-tf"
           echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
-          terraform destroy -auto-approve -lock=false
+          terraform destroy -auto-approve -lock=false -var="state_bucket=$(echo $state_bucket)"
           echo "[CONTROLLER-FIREWALL]: Removed worker IP from firewall."
 options:
   env:

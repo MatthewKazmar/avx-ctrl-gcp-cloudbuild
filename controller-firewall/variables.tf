@@ -3,6 +3,11 @@ variable "project" {
   description = "Google Cloud Project for deployment"
 }
 
+variable "state_bucket" {
+  type        = string
+  description = "State bucket for Remote State."
+}
+
 variable "network_tags" {
   type        = set(string)
   description = "Network tags to assign to the Aviatrix Controller Instance"
@@ -13,10 +18,6 @@ data "terraform_remote_state" "instance" {
   backend = "gcs"
   config = {
     bucket = var.state_bucket
-    prefix = local.remote_state_prefix
+    prefix = "avx/instance"
   }
-}
-
-locals {
-  remote_state_prefix = "${var.state_prefix}/instance"
 }
