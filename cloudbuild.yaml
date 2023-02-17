@@ -36,6 +36,7 @@ steps:
       - -c
       - |
           cd controller-firewall
+          apk add curl
           export TF_VAR_worker_ip=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip" -H "Metadata-Flavor: Google")
           echo "[CONTROLLER-FIREWALL]: Cloud worker IP is: $$TF_VAR_worker_ip."
           echo "[CONTROLLER-FIREWALL]: Adding Cloud Build Worker IP to firewall."
@@ -80,10 +81,11 @@ steps:
       - -c
       - |
           cd controller-firewall
-          echo "[CONTROLLER-FIREWALL]: Removing Cloud Build Worker IP from firewall."
-          echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
+          apk add curl
           export TF_VAR_worker_ip=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip" -H "Metadata-Flavor: Google")
           echo "[CONTROLLER-FIREWALL]: Cloud worker IP is: $$TF_VAR_worker_ip."
+          echo "[CONTROLLER-FIREWALL]: Removing Cloud Build Worker IP from firewall."
+          echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
           terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
           echo "[CONTROLLER-FIREWALL]: Running Terraform destory."
           terraform destroy -auto-approve -lock=false
