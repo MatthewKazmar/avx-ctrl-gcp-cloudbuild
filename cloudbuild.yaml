@@ -3,13 +3,7 @@ steps:
     name: 'hashicorp/terraform:1.3.7'
     entrypoint: 'sh'
     args:
-      - -c
-      - |
-          #cd controller-network
-          echo "[CONTROLLER-NETWORK]: Running Terraform Init"
-          terraform -chdir=controller-network init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/network"
-          echo "[CONTROLLER-NETWORK] Running Terraform apply."
-          terraform -chdir=controller-network apply -compact-warnings -auto-approve -lock=false
+      - ./run-terraform.sh controller-network
     env:
       - 'TF_VAR_controller_name=mattk-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'

@@ -8,3 +8,11 @@ variable "avx_service_account_secret_name" {
   description = "Name of the secret that contains the Aviatrix Service Account json."
   default     = "avx-service-account"
 }
+
+data "terraform_remote_state" "instance" {
+  backend = "gcs"
+  config = {
+    bucket = var.state_bucket
+    prefix = "avx/instance"
+  }
+}
