@@ -38,7 +38,7 @@ steps:
           cd controller-firewall
           echo "[CONTROLLER-FIREWALL]: Adding Cloud Build Worker IP to firewall."
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init
+          terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
           echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
           terraform apply -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Added worker IP to firewall."
@@ -80,8 +80,8 @@ steps:
           cd controller-firewall
           echo "[CONTROLLER-FIREWALL]: Removing Cloud Build Worker IP from firewall."
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init
-          echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
+          terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
+          echo "[CONTROLLER-FIREWALL]: Running Terraform destory."
           terraform destroy -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Removed worker IP from firewall."
 options:
