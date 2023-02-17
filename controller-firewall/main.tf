@@ -2,18 +2,19 @@
 #The idea is to run the apply at the beginning, then destroy at the end of the step.
 
 #Get my public IP
-data "http" "buildip" {
-  url = "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip"
+# data "http" "buildip" {
+#   url = "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip"
 
-  request_headers = {
-    Metadata-Flavor = "Google"
-  }
-}
+#   request_headers = {
+#     Metadata-Flavor = "Google"
+#   }
+# }
 
 resource "google_compute_firewall" "aviatrix_cloudbuild" {
   name          = "avx-cloudbuild-temp-rule"
   network       = data.terraform_remote_state.instance.outputs.controller_network
-  source_ranges = ["${data.http.buildip.response_body}/32"]
+  #source_ranges = ["${data.http.buildip.response_body}/32"]
+  source_ranges = [var.worker_ip]
 
   allow {
     protocol = "tcp"

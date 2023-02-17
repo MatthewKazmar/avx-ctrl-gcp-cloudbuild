@@ -8,6 +8,11 @@ variable "state_bucket" {
   description = "State bucket for Remote State."
 }
 
+variable "worker_ip" {
+  type        = string
+  description = "State bucket for Remote State."
+}
+
 variable "network_tags" {
   type        = set(string)
   description = "Network tags to assign to the Aviatrix Controller Instance"
