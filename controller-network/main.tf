@@ -8,7 +8,7 @@ resource "google_compute_subnetwork" "avx_subnetwork" {
   count = local.create_vpc
 
   name          = local.subnetwork_name
-  network       = google_compute_network.avx_network.id
+  network       = google_compute_network.avx_network[0].id
   ip_cidr_range = var.subnetwork_cidr
   region        = var.subnetwork_region
 
