@@ -3,6 +3,7 @@
 if [ -z $1 ]; then
   echo "Specify build step."
   exit 1
+fi
 
 STAGE="[$1]:"
 BUCKET="bucket=$TF_VAR_state_bucket"
