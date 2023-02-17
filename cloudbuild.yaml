@@ -22,17 +22,7 @@ steps:
   - id: 'controller-init-py'
     name: 'hashicorp/terraform:1.3.7'
     entrypoint: 'sh'
-    args:
-      - -c
-      - |
-          echo "[CONTROLLER-INIT-PY]: Set environment variables."
-          export AVIATRIX_PRIVATE_IP=$(cat /workspace/controller_private_ip)
-          export AVIATRIX_CONTROLLER_IP=$(cat /workspace/controller_public_ip)
-          echo "[CONTROLLER-INIT-PY]: Installing Python3 and requirements."
-          apk -q add --no-cache python3 py3-requests
-          cd controller-init-py
-          echo "[CONTROLLER-INIT-PY]: Running init script."
-          python3 init.py
+    args: ['./run-init-py.sh']
     secretEnv:
     - 'AVIATRIX_CUSTOMER_ID'
     - 'AVIATRIX_CONTROLLER_ADMIN_EMAIL'
