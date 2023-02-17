@@ -9,6 +9,7 @@ terraform init -compact-warnings -backend-config=$BUCKET -backend-config=$PREFIX
 echo "[CONTROLLER-INIT-PY]: Set environment variables from state."
 export AVIATRIX_PRIVATE_IP=$(terraform output -raw controller_private_ip)
 export AVIATRIX_CONTROLLER_IP=$(terraform output -raw controller_public_ip)
+echo "[CONTROLLER-INIT-PY]: Controller IPs are $AVIATRIX_CONTROLLER_IP and $AVIATRIX_PRIVATE_IP."
 echo "[CONTROLLER-INIT-PY]: Installing Python3 and requirements."
 apk -q add --no-cache python3 py3-requests
 cd controller-init-py
