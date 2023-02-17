@@ -12,7 +12,7 @@ PREFIX="prefix=avx/$1"
 echo "$STAGE Running Terraform Init"
 terraform -chdir=$1 init -compact-warnings -backend-config=$BUCKET -backend-config=$PREFIX
 
-if [ $2 -eq "destroy "]; then
+if [ "$2" = "destroy" ]; then
   echo "$STAGE Running Terraform Destory."
   terraform -chdir=$1 destroy -compact-warnings -auto-approve -lock=false
 else
