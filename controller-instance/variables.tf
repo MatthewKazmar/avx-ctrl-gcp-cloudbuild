@@ -52,7 +52,7 @@ data "terraform_remote_state" "network" {
 }
 
 data "google_compute_subnetwork" "avx_subnetwork" {
-  self_link = data.terraform_remote_state.network.subnetwork_self_link
+  self_link = data.terraform_remote_state.network.outputs.subnetwork_self_link
 }
 
 locals {

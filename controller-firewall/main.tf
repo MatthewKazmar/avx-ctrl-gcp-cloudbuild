@@ -12,7 +12,7 @@ data "http" "buildip" {
 
 resource "google_compute_firewall" "aviatrix_cloudbuild" {
   name          = "avx-cloudbuild-temp-rule"
-  network       = data.terraform_remote_state.instance.network
+  network       = data.terraform_remote_state.instance.outputs.network
   source_ranges = [data.http.buildip.response_body]
 
   allow {
@@ -24,11 +24,11 @@ resource "google_compute_firewall" "aviatrix_cloudbuild" {
 }
 
 resource "local_file" "public_ip" {
-  content  = data.terraform_remote_state.instance.controller_public_ip
+  content  = data.terraform_remote_state.instance.outputs.controller_public_ip
   filename = "../controller_public_ip"
 }
 
 resource "local_file" "private_ip" {
-  content  = data.terraform_remote_state.instance.controller_private_ip
+  content  = data.terraform_remote_state.instance.outputs.controller_private_ip
   filename = "../controller_private_ip"
 }
