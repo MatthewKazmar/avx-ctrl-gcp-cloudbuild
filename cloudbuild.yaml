@@ -36,7 +36,7 @@ steps:
       - -c
       - |
           cd controller-firewall
-          #apk add curl
+          #apk -q add curl
           #export TF_VAR_worker_ip=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip" -H "Metadata-Flavor: Google")
           #export TF_VAR_worker_ip=$(curl -s "http://icanhazip.com")
           echo "[CONTROLLER-FIREWALL]: Cloud worker IP is: $$TF_VAR_worker_ip."
@@ -56,8 +56,7 @@ steps:
           export AVIATRIX_PRIVATE_IP=$(cat /workspace/controller_private_ip)
           export AVIATRIX_CONTROLLER_IP=$(cat /workspace/controller_public_ip)
           echo "[CONTROLLER-INIT-PY]: Installing Python3 and requirements."
-          apk add --no-cache python3 py3-pip
-          pip install requests
+          apk -q add --no-cache python3 py3-requests
           cd controller-init-py
           echo "[CONTROLLER-INIT-PY]: Running init script."
           python3 init.py
@@ -82,7 +81,7 @@ steps:
       - -c
       - |
           cd controller-firewall
-          #apk add curl
+          #apk -q add curl
           #export TF_VAR_worker_ip=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip" -H "Metadata-Flavor: Google")
           #export TF_VAR_worker_ip=$(curl -s "http://icanhazip.com")
           echo "[CONTROLLER-FIREWALL]: Cloud worker IP is: $$TF_VAR_worker_ip."
