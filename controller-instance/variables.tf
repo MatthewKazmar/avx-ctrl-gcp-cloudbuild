@@ -3,17 +3,6 @@ variable "project" {
   description = "Google Cloud Project for deployment"
 }
 
-variable "state_bucket" {
-  type        = string
-  description = "Name of storage state_bucket for remote state."
-}
-
-variable "state_prefix" {
-  type        = string
-  description = "Prefix for states from the Aviatrix deployment."
-  default     = "aviatrix/"
-}
-
 variable "admin_cidrs" {
   type        = list(string)
   description = "Allow admin access (HTTPS) to Aviatrix Controller."
