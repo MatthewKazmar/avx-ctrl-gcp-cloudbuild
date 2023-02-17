@@ -2,8 +2,7 @@ steps:
   - id: 'controller-network'
     name: 'hashicorp/terraform:1.3.7'
     entrypoint: 'sh'
-    args:
-      - ./run-terraform.sh controller-network
+    args: ['./run-terraform.sh', 'controller-network']
     env:
       - 'TF_VAR_controller_name=mattk-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'
