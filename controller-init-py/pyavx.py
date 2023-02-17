@@ -179,6 +179,9 @@ class Pyavx:
 
     self.connected = False
 
+    if not self.ip:
+      print('There is no IP in the class constructor or in the AVIATRIX_CONTROLLER_IP environment variable.')
+
     # Get API token and CID.
     # Can call connect again if the controller session is invalid due to password change or update.
     #self.connect(u, p)

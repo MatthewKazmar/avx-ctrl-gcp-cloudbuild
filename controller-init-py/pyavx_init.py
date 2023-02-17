@@ -99,6 +99,9 @@ class Pyavx_Init(Pyavx):
 
     Pyavx.__init__(self)
 
+    if not self.ip:
+      return
+    
     # See if we can login with the private ip
     oldpw = kwargs.get('oldpw')
     email = kwargs.get('email')
