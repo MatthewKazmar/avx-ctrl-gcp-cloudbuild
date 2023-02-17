@@ -137,6 +137,8 @@ class Pyavx:
     #Controller is TCP Handshaking now. Let's try to log in and get the CID.    
     if not u:
       u = os.getenv('AVIATRIX_USERNAME')
+      if not u:
+        u = 'admin'
 
     if not p:
       p = os.getenv('AVIATRIX_PASSWORD')
@@ -181,7 +183,3 @@ class Pyavx:
 
     if not self.ip:
       print('There is no IP in the class constructor or in the AVIATRIX_CONTROLLER_IP environment variable.')
-
-    # Get API token and CID.
-    # Can call connect again if the controller session is invalid due to password change or update.
-    #self.connect(u, p)

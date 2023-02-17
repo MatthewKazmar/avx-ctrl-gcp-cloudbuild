@@ -7,9 +7,9 @@ steps:
       - |
           cd controller-network
           echo "[CONTROLLER-NETWORK]: Running Terraform Init"
-          terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/network"
+          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/network"
           echo "[CONTROLLER-NETWORK] Running Terraform apply."
-          terraform apply -auto-approve -lock=false
+          terraform apply -compact-warnings -auto-approve -lock=false
     env:
       - 'TF_VAR_controller_name=mattk-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'
@@ -23,7 +23,7 @@ steps:
           echo "[CONTROLLER-INSTANCE]: Running Terraform Init"
           terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/instance"
           echo "[CONTROLLER-INSTANCE]: Running Terraform apply."
-          terraform apply -auto-approve -lock=false
+          terraform apply -compact-warnings -auto-approve -lock=false
     env:
       - 'TF_VAR_controller_name=mattk-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'
@@ -44,7 +44,7 @@ steps:
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
           terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
           echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
-          terraform apply -auto-approve -lock=false
+          terraform apply -compact-warnings -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Added worker IP to firewall."
   - id: 'controller-init-py'
     name: 'hashicorp/terraform:1.3.7'
@@ -74,7 +74,7 @@ steps:
           echo "[CONTROLLER-INIT-TF]: Running Terraform Init."
           terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/init-tf"
           echo "[CONTROLLER-INIT-TF]: Running Terraform Apply."
-          terraform apply -auto-approve -lock=false
+          terraform apply -compact-warnings -auto-approve -lock=false
   - id: 'controller-firewall-destroy'
     name: 'hashicorp/terraform:1.3.7'
     entrypoint: 'sh'
@@ -90,7 +90,7 @@ steps:
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
           terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
           echo "[CONTROLLER-FIREWALL]: Running Terraform destory."
-          terraform destroy -auto-approve -lock=false
+          terraform destroy -compact-warnings -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Removed worker IP from firewall."
 options:
   env:

@@ -1,6 +1,6 @@
 # Deploy Controller
 resource "google_compute_address" "avx_controller_publicip" {
-  name = local.public_ip_name
+  name   = local.public_ip_name
   region = data.google_compute_subnetwork.avx_subnetwork.region
 }
 

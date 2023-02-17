@@ -106,7 +106,7 @@ class Pyavx_Init(Pyavx):
     oldpw = kwargs.get('oldpw')
     email = kwargs.get('email')
     if oldpw:
-      if self.connect(u='admin', p=oldpw):
+      if self.connect(p=oldpw):
         adminpw_set = False
         print('Logged into the controller using the private IP.')
     if not self.connected:
@@ -131,6 +131,5 @@ class Pyavx_Init(Pyavx):
 
     self.set_initialconfig(kwargs.get('target_version'))
 
-    #Sleep for 2 min then try to connect.
     self.connect()
     
