@@ -88,7 +88,7 @@ options:
   env:
     - 'TF_VAR_project=$PROJECT_ID'
   secretEnv:
-    - 'state_bucket'
+    - 'TF_VAR_state_bucket'
     - 'TF_VAR_subnetwork_self_link'
     - 'AVIATRIX_PASSWORD'
 availableSecrets:
