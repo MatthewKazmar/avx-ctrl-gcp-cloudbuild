@@ -9,14 +9,7 @@ steps:
   - id: 'controller-instance'
     name: 'hashicorp/terraform:1.3.7'
     entrypoint: 'sh'
-    args:
-      - -c
-      - |
-          cd controller-instance
-          echo "[CONTROLLER-INSTANCE]: Running Terraform Init"
-          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/instance"
-          echo "[CONTROLLER-INSTANCE]: Running Terraform apply."
-          terraform apply -compact-warnings -auto-approve -lock=false
+    args: ['./run-terraform.sh', 'controller-instance']
     env:
       - 'TF_VAR_controller_name=mattk-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'
@@ -25,16 +18,7 @@ steps:
   - id: 'controller-firewall'
     name: 'hashicorp/terraform:1.3.7'
     entrypoint: 'sh'
-    args:
-      - -c
-      - |
-          cd controller-firewall
-          echo "[CONTROLLER-FIREWALL]: Adding Cloud Build Worker IP to firewall."
-          echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
-          echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
-          terraform apply -compact-warnings -auto-approve -lock=false
-          echo "[CONTROLLER-FIREWALL]: Added worker IP to firewall."
+    args: ['./run-terraform.sh', 'controller-firewall']
   - id: 'controller-init-py'
     name: 'hashicorp/terraform:1.3.7'
     entrypoint: 'sh'
@@ -55,28 +39,11 @@ steps:
   - id: 'controller-init-tf'
     name: 'hashicorp/terraform:1.3.7'
     entrypoint: 'sh'
-    args:
-      - -c
-      - |
-          cd controller-init-tf
-          export AVIATRIX_CONTROLLER_IP=$(cat /workspace/controller_public_ip)
-          echo "[CONTROLLER-INIT-TF]: Running Terraform Init."
-          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/init-tf"
-          echo "[CONTROLLER-INIT-TF]: Running Terraform Apply."
-          terraform apply -compact-warnings -auto-approve -lock=false
+    args: ['./run-terraform.sh', 'controller-init-tf']
   - id: 'controller-firewall-destroy'
     name: 'hashicorp/terraform:1.3.7'
     entrypoint: 'sh'
-    args:
-      - -c
-      - |
-          cd controller-firewall
-          echo "[CONTROLLER-FIREWALL]: Removing Cloud Build Worker IP from firewall."
-          echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
-          echo "[CONTROLLER-FIREWALL]: Running Terraform destory."
-          terraform destroy -compact-warnings -auto-approve -lock=false
-          echo "[CONTROLLER-FIREWALL]: Removed worker IP from firewall."
+    args: ['./run-terraform.sh', 'controller-firewall', 'destroy']
 options:
   env:
     - 'TF_VAR_project=$PROJECT_ID'

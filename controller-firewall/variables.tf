@@ -23,6 +23,6 @@ data "terraform_remote_state" "instance" {
   backend = "gcs"
   config = {
     bucket = var.state_bucket
-    prefix = "avx/instance"
+    prefix = "avx/controller-instance"
   }
 }
