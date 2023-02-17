@@ -18,7 +18,7 @@ resource "google_compute_instance" "avx_controller_vm" {
   }
 
   network_interface {
-    subnetwork = data.terraform_remote_state.network.outputs.subnetwork_selflink
+    subnetwork = data.terraform_remote_state.network.outputs.subnetwork_self_link
     access_config {
       nat_ip = google_compute_address.avx_controller_publicip.address
     }
