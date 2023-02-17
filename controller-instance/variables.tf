@@ -46,7 +46,7 @@ variable "zone" {
 data "terraform_remote_state" "network" {
   backend = "gcs"
   config = {
-    state_bucket = var.state_bucket
+    bucket = var.state_bucket
     prefix       = "avx/network"
   }
 }
