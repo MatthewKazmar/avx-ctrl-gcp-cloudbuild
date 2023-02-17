@@ -9,7 +9,7 @@ variable "state_bucket" {
 }
 
 variable "admin_cidrs" {
-  type        = list(string)
+  type        = string
   description = "Allow admin access (HTTPS) to Aviatrix Controller."
 }
 
@@ -59,5 +59,5 @@ locals {
   public_ip_name     = "${var.controller_name}-publicip"
   firewall_rule_name = "${var.controller_name}-adminaccess"
   instance_zone      = "${data.google_compute_subnetwork.avx_subnetwork.region}-${var.zone}"
-  admin_cidrs = var.admin_cidrs
+  admin_cidrs        = split(",", var.admin_cidrs)
 }

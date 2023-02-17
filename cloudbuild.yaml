@@ -7,7 +7,7 @@ steps:
       - |
           cd controller-network
           echo "[CONTROLLER-NETWORK]: Running Terraform Init"
-          terraform init -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/init-tf" -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/network"
+          terraform init -backend-config="bucket=$(echo $TF_VAR_state_bucket)" -backend-config="prefix=avx/init-tf" -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/network"
           echo "[CONTROLLER-NETWORK] Running Terraform apply."
           terraform apply -auto-approve -lock=false
     env:
@@ -21,9 +21,9 @@ steps:
       - |
           cd controller-instance
           echo "[CONTROLLER-INSTANCE]: Running Terraform Init"
-          terraform init -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/init-tf" -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/instance"
+          terraform init -backend-config="bucket=$(echo $TF_VAR_state_bucket)" -backend-config="prefix=avx/init-tf" -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/instance"
           echo "[CONTROLLER-INSTANCE]: Running Terraform apply."
-          terraform apply -auto-approve -lock=false -var="state_bucket=$(echo $state_bucket)"
+          terraform apply -auto-approve -lock=false
     env:
       - 'TF_VAR_controller_name=mattk-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'
@@ -38,9 +38,9 @@ steps:
           cd controller-firewall
           echo "[CONTROLLER-FIREWALL]: Adding Cloud Build Worker IP to firewall."
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/init-tf"
+          terraform init -backend-config="bucket=$(echo $TF_VAR_state_bucket)" -backend-config="prefix=avx/init-tf"
           echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
-          terraform apply -auto-approve -lock=false -var="state_bucket=$(echo $state_bucket)"
+          terraform apply -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Added worker IP to firewall."
   - id: 'controller-init-py'
     name: 'hashicorp/terraform:1.3.7'
@@ -68,7 +68,7 @@ steps:
       - |
           cd controller-init-tf
           echo "[CONTROLLER-INIT-TF]: Running Terraform Init."
-          terraform init -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/init-tf"
+          terraform init -backend-config="bucket=$(echo $TF_VAR_state_bucket)" -backend-config="prefix=avx/init-tf"
           echo "[CONTROLLER-INIT-TF]: Running Terraform Apply."
           terraform apply -auto-approve -lock=false
   - id: 'controller-firewall-destroy'
@@ -80,9 +80,9 @@ steps:
           cd controller-firewall
           echo "[CONTROLLER-FIREWALL]: Removing Cloud Build Worker IP from firewall."
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init -backend-config="bucket=$(echo $state_bucket)" -backend-config="prefix=avx/init-tf"
+          terraform init -backend-config="bucket=$(echo $TF_VAR_state_bucket)" -backend-config="prefix=avx/init-tf"
           echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
-          terraform destroy -auto-approve -lock=false -var="state_bucket=$(echo $state_bucket)"
+          terraform destroy -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Removed worker IP from firewall."
 options:
   env:
@@ -102,6 +102,6 @@ availableSecrets:
     - versionName: projects/$PROJECT_ID/secrets/avx-admin-cidrs/versions/1
       env: 'TF_VAR_admin_cidrs'
     - versionName: projects/$PROJECT_ID/secrets/avx-state-bucket/versions/1
-      env: 'state_bucket'
+      env: 'TF_VAR_state_bucket'
     - versionName: projects/$PROJECT_ID/secrets/avx-subnetwork/versions/1
       env: 'TF_VAR_subnetwork_self_link'
