@@ -5,11 +5,11 @@ steps:
     args:
       - -c
       - |
-          cd controller-network
+          #cd controller-network
           echo "[CONTROLLER-NETWORK]: Running Terraform Init"
-          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/network"
+          terraform -chdir=controller-network init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/network"
           echo "[CONTROLLER-NETWORK] Running Terraform apply."
-          terraform apply -compact-warnings -auto-approve -lock=false
+          terraform -chdir=controller-network apply -compact-warnings -auto-approve -lock=false
     env:
       - 'TF_VAR_controller_name=mattk-controller'
       - 'TF_VAR_image=aviatrix-public/avx-controller-gcp-2022-10-31'
@@ -21,7 +21,7 @@ steps:
       - |
           cd controller-instance
           echo "[CONTROLLER-INSTANCE]: Running Terraform Init"
-          terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/instance"
+          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/instance"
           echo "[CONTROLLER-INSTANCE]: Running Terraform apply."
           terraform apply -compact-warnings -auto-approve -lock=false
     env:
@@ -36,13 +36,9 @@ steps:
       - -c
       - |
           cd controller-firewall
-          #apk -q add curl
-          #export TF_VAR_worker_ip=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip" -H "Metadata-Flavor: Google")
-          #export TF_VAR_worker_ip=$(curl -s "http://icanhazip.com")
-          echo "[CONTROLLER-FIREWALL]: Cloud worker IP is: $$TF_VAR_worker_ip."
           echo "[CONTROLLER-FIREWALL]: Adding Cloud Build Worker IP to firewall."
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
+          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
           echo "[CONTROLLER-FIREWALL]: Running Terraform apply."
           terraform apply -compact-warnings -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Added worker IP to firewall."
@@ -70,8 +66,9 @@ steps:
       - -c
       - |
           cd controller-init-tf
+          export AVIATRIX_CONTROLLER_IP=$(cat /workspace/controller_public_ip)
           echo "[CONTROLLER-INIT-TF]: Running Terraform Init."
-          terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/init-tf"
+          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/init-tf"
           echo "[CONTROLLER-INIT-TF]: Running Terraform Apply."
           terraform apply -compact-warnings -auto-approve -lock=false
   - id: 'controller-firewall-destroy'
@@ -81,19 +78,16 @@ steps:
       - -c
       - |
           cd controller-firewall
-          #apk -q add curl
-          #export TF_VAR_worker_ip=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip" -H "Metadata-Flavor: Google")
-          #export TF_VAR_worker_ip=$(curl -s "http://icanhazip.com")
-          echo "[CONTROLLER-FIREWALL]: Cloud worker IP is: $$TF_VAR_worker_ip."
           echo "[CONTROLLER-FIREWALL]: Removing Cloud Build Worker IP from firewall."
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
-          terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
+          terraform init -compact-warnings -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
           echo "[CONTROLLER-FIREWALL]: Running Terraform destory."
           terraform destroy -compact-warnings -auto-approve -lock=false
           echo "[CONTROLLER-FIREWALL]: Removed worker IP from firewall."
 options:
   env:
     - 'TF_VAR_project=$PROJECT_ID'
+    - 'AVIATRIX_USERNAME=admin'
   secretEnv:
     - 'TF_VAR_state_bucket'
     - 'TF_VAR_subnetwork_self_link'
