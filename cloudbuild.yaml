@@ -49,8 +49,8 @@ steps:
       - -c
       - |
           echo "[CONTROLLER-INIT-PY]: Set environment variables."
-          export AVIATRIX_PRIVATE_IP=$(cat controller_private_ip)
-          export AVIATRIX_CONTROLLER_IP=$(cat controller_public_ip)
+          export AVIATRIX_PRIVATE_IP=$(cat /workspace/controller_private_ip)
+          export AVIATRIX_CONTROLLER_IP=$(cat /workspace/controller_public_ip)
           echo "[CONTROLLER-INIT-PY]: Installing Python3 and requirements."
           apk add --no-cache python3 py3-pip
           pip install requests
@@ -80,6 +80,8 @@ steps:
           cd controller-firewall
           echo "[CONTROLLER-FIREWALL]: Removing Cloud Build Worker IP from firewall."
           echo "[CONTROLLER-FIREWALL]: Running Terraform Init"
+          export TF_VAR_worker_ip=$(curl -s "http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip" -H "Metadata-Flavor: Google")
+          echo "[CONTROLLER-FIREWALL]: Cloud worker IP is: $$TF_VAR_worker_ip."
           terraform init -backend-config="bucket=$(echo $$TF_VAR_state_bucket)" -backend-config="prefix=avx/firewall"
           echo "[CONTROLLER-FIREWALL]: Running Terraform destory."
           terraform destroy -auto-approve -lock=false
